@@ -15,10 +15,10 @@ protocol ShowLink: UIViewController {
 class DataView: UIView {
     
     @IBOutlet weak var indexer: UILabel!
-    @IBOutlet weak var moderatorName: UILabel!
+    @IBOutlet private weak var moderatorName: UILabel!
     @IBOutlet weak var moderatorImage: UIImageView!
     
-    @IBAction func goToBlog(_ sender: UIButton) {
+    @IBAction private func goToBlog(_ sender: UIButton) {
         guard let ownerLink = owningModerator?.link,
             let ownerURL = URL(string: ownerLink) else { return }
         

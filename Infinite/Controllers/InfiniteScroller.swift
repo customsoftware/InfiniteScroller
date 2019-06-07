@@ -9,12 +9,13 @@
 import UIKit
 
 class InfiniteScroller: UIScrollView {
-    let cellHeight: CGFloat = 150
+    private let cellHeight: CGFloat = 150
+    private let scrollContentMultiple: CGFloat = 3
     
-    var contentView: UIView?
-    var currentFirstPointer = 0
-    var currentLastPointer = 0
-    var displayedModeratorViews = [DataView]()
+    private var contentView: UIView?
+    private var currentFirstPointer = 0
+    private var currentLastPointer = 0
+    private var displayedModeratorViews = [DataView]()
     weak var passThroughDelegate: ShowLink?
     
     override func layoutSubviews() {
@@ -30,7 +31,9 @@ class InfiniteScroller: UIScrollView {
     func configureView(in containerView: UIView) {
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
-        contentSize = CGSize(width: containerView.frame.width, height: containerView.frame.height * 5)
+        isDirectionalLockEnabled = true
+        
+        contentSize = CGSize(width: containerView.frame.width, height: containerView.frame.height * scrollContentMultiple)
         contentView = subviews.first
         initialLoad()
     }

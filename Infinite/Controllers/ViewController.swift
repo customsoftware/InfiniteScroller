@@ -11,9 +11,9 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    let webSegue = "pushToLink"
+    private let webSegue = "pushToLink"
     
-    @IBOutlet weak var scroller: InfiniteScroller!
+    @IBOutlet private weak var scroller: InfiniteScroller!
     
     override func loadView() {
         super.loadView()
