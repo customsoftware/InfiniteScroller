@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         scroller.contentOffset = CGPoint(x: 0, y: scroller.contentSize.height/2)
-        
+        navigationItem.title = "Stackoverflow Moderators"
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateNotification), name: photosDoneNotificationName, object: nil)
     }
     

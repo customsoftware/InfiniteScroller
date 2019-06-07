@@ -148,9 +148,9 @@ fileprivate extension InfiniteScroller {
         case .same:
             offSet = 0
         case .above:
-            offSet = -150
+            offSet = -cellHeight
         case .below:
-            offSet = 150
+            offSet = cellHeight
         }
         
         return CGRect(x: 0, y: currentY + offSet, width: contentSize.width, height: cellHeight)
