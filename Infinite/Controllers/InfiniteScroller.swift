@@ -40,6 +40,15 @@ class InfiniteScroller: UIScrollView {
         let maximumVisibleY = visibleBounds.maxY
         tileImagesFrom(from: minimumVisibleY, to: maximumVisibleY)
     }
+    
+    func refreshArt() {
+        displayedModeratorViews.forEach({
+            guard let moderatorUserID = $0.owningModerator?.userID,
+                let moderator = ModeratorManager.shared.getModerator(with: moderatorUserID) else { return }
+            
+            $0.moderatorImage.image = moderator.userImage
+        })
+    }
 }
 
 fileprivate extension InfiniteScroller {
@@ -61,20 +70,16 @@ fileprivate extension InfiniteScroller {
     }
     
     func tileImagesFrom(from minVisibleY: CGFloat, to maxVisibleY: CGFloat) {
-        if displayedModeratorViews.count == 0,
-            let monitor = ModeratorManager.shared.getModeratorAt(index: currentFirstPointer) {
-            let newModeratorView = insertModerator()
-            newModeratorView.owningModerator = monitor
-            newModeratorView.delegate = passThroughDelegate
+        if displayedModeratorViews.count == 0 {
+            let newModeratorView = createNewModeratorView(for: currentFirstPointer)
             let newFrame = setGetNextFrame(currentY: minVisibleY, in: .same)
             newModeratorView.frame = newFrame
             displayedModeratorViews.append(newModeratorView)
             currentLastPointer += 1
             currentFirstPointer -= 1
-            print("Pointers set at initial: \(currentFirstPointer) - \(currentLastPointer)")
         }
         
-        // Add moderators below visible
+        // Add moderators below visible line
         if let lastModerator = displayedModeratorViews.last {
             var bottomEdge = lastModerator.frame.minY
             while bottomEdge < maxVisibleY {
@@ -82,7 +87,7 @@ fileprivate extension InfiniteScroller {
             }
         }
 
-        // Add moderators above visible
+        // Add moderators above visible line
         if let firstModerator = displayedModeratorViews.first {
             var topEdge = firstModerator.frame.minY
             while topEdge > minVisibleY {
@@ -90,7 +95,7 @@ fileprivate extension InfiniteScroller {
             }
         }
 
-        // Remove moderators below
+        // Remove moderators below visible line
         if var lastModerator = displayedModeratorViews.last {
             while lastModerator.frame.minY > maxVisibleY {
                 lastModerator.removeFromSuperview()
@@ -103,7 +108,7 @@ fileprivate extension InfiniteScroller {
             }
         }
 
-        // Remove moderators above
+        // Remove moderators above visible line
         if var firstModerator = displayedModeratorViews.first {
             while firstModerator.frame.maxY < minVisibleY {
                 firstModerator.removeFromSuperview()
@@ -114,25 +119,19 @@ fileprivate extension InfiniteScroller {
         }
     }
     
-    func bumpDown(counter: inout Int, _ shouldPrint: Bool = false) {
+    func bumpDown(counter: inout Int) {
         if counter == 0 {
             counter = ModeratorManager.shared.getNumberOfModerators()
         }
         counter -= 1
-        if shouldPrint {
-            print("Bumped down Counter: \(counter)")
-        }
     }
     
-    func bumpUp(counter: inout Int, _ shouldPrint: Bool = false) {
+    func bumpUp(counter: inout Int) {
         let workingCounter = ModeratorManager.shared.getNumberOfModerators()
         if counter == (workingCounter - 1) {
             counter = -1
         }
         counter += 1
-        if shouldPrint {
-            print("Bumped up Counter: \(counter)")
-        }
     }
     
     func setGetNextFrame(currentY: CGFloat, in position: NewFrameRelativeLocation) -> CGRect {
@@ -156,25 +155,26 @@ fileprivate extension InfiniteScroller {
         return newView
     }
     
-    func addNewModeratorsAbove(top: CGFloat, for startingIndex: Int) -> CGFloat {
+    func createNewModeratorView(for index: Int) -> DataView {
         let newModeratorView = insertModerator()
-        displayedModeratorViews.insert(newModeratorView, at: 0)
-        let moderator = ModeratorManager.shared.getModeratorAt(index: currentFirstPointer)
+        let moderator = ModeratorManager.shared.getModeratorAt(index: index)
         newModeratorView.owningModerator = moderator
         newModeratorView.delegate = passThroughDelegate
-        newModeratorView.indexer.text = "\(currentFirstPointer + 1)"
+        newModeratorView.indexer.text = "\(index + 1)"
+        return newModeratorView
+    }
+    
+    func addNewModeratorsAbove(top: CGFloat, for startingIndex: Int) -> CGFloat {
+        let newModeratorView = createNewModeratorView(for: currentFirstPointer)
+        displayedModeratorViews.insert(newModeratorView, at: 0)
         bumpDown(counter: &currentFirstPointer)
         newModeratorView.frame = setGetNextFrame(currentY: top, in: .above)
         return newModeratorView.frame.minY
     }
     
     func addNewModeratorsBelow(bottom: CGFloat, for endingIndex: Int) -> CGFloat {
-        let newModeratorView = insertModerator()
+        let newModeratorView = createNewModeratorView(for: currentLastPointer)
         displayedModeratorViews.append(newModeratorView)
-        let moderator = ModeratorManager.shared.getModeratorAt(index: currentLastPointer)
-        newModeratorView.owningModerator = moderator
-        newModeratorView.delegate = passThroughDelegate
-        newModeratorView.indexer.text = "\(currentLastPointer + 1)"
         bumpUp(counter: &currentLastPointer)
         newModeratorView.frame = setGetNextFrame(currentY: bottom, in: .below)
         return newModeratorView.frame.minY

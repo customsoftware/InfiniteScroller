@@ -17,14 +17,16 @@ class ViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
+        ModeratorManager.shared.start(with: self)
         scroller.passThroughDelegate = self
         scroller.configureView(in: view)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         scroller.contentOffset = CGPoint(x: 0, y: scroller.contentSize.height/2)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateNotification), name: photosDoneNotificationName, object: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -32,6 +34,25 @@ class ViewController: UIViewController {
         if segueID == webSegue {
             let destinationVC = segue.destination as! WebViewController
             destinationVC.webURL = sender as? URL
+        }
+    }
+    
+    @objc func handleUpdateNotification() {
+        DispatchQueue.main.async {
+            self.scroller.refreshArt()
+        }
+    }
+}
+
+extension ViewController: UIOutlet {
+    func updateUI(with state: AppState) {
+        DispatchQueue.main.async {
+            switch state {
+            case .loadFinished:
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            case .startingUp, .loadingImage:
+                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            }
         }
     }
 }

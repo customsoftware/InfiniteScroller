@@ -31,6 +31,7 @@ class DataView: UIView {
         didSet {
             guard let owner = owningModerator else { return }
             moderatorName.text = owner.displayName
+            moderatorImage.image = owner.userImage
         }
     }
 }

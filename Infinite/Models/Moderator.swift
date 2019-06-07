@@ -6,27 +6,27 @@
 //  Copyright © 2019 Kenneth Cluff. All rights reserved.
 //
 
-import Foundation
-
+import UIKit
 
 struct Badges: Codable {
     var bronze: Int
     var silver: Int
     var gold: Int
-//
-//    enum CodingKeys: String, CodingKey {
-//        case bronze, silver, gold
-//    }
 }
 
 struct ModeratorList: Codable {
     var items: [Moderator]    
-//    enum CodingKeys: String, CodingKey {
-//        case items
-//    }
 }
 
-struct Moderator: Codable {
+struct Moderator: Codable, Hashable {
+    static func == (lhs: Moderator, rhs: Moderator) -> Bool {
+        return lhs.userID == rhs.userID
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(userID)
+    }
+    
+    var uiDelegate: UIOutlet?
     var badgeCounts: Badges
     var accountID: Int
     var isEmployee: Bool
@@ -47,7 +47,16 @@ struct Moderator: Codable {
     var link: String
     var profileImageLink: String
     var displayName: String
-    
+    var userImage: UIImage? {
+        get {
+            return _userImage ?? UIImage(named: "IMG_0175")!
+        }
+        set {
+            _userImage = newValue
+            uiDelegate?.updateUI(with: .loadFinished)
+        }
+    }
+    private var _userImage: UIImage?
     
     enum CodingKeys: String, CodingKey {
         case badgeCounts = "badge_counts"
