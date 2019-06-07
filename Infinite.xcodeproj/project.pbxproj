@@ -12,6 +12,14 @@
 		902EF37722A863360077CB47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902EF37522A863360077CB47 /* Main.storyboard */; };
 		902EF37922A863360077CB47 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 902EF37822A863360077CB47 /* Assets.xcassets */; };
 		902EF37C22A863360077CB47 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902EF37A22A863360077CB47 /* LaunchScreen.storyboard */; };
+		902EF38522A865D90077CB47 /* Moderator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902EF38422A865D90077CB47 /* Moderator.swift */; };
+		902EF38822A86A8F0077CB47 /* ModeratorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902EF38722A86A8F0077CB47 /* ModeratorManager.swift */; };
+		902EF38A22A8721D0077CB47 /* TestFile in Resources */ = {isa = PBXBuildFile; fileRef = 902EF38922A8721D0077CB47 /* TestFile */; };
+		9054A66E22A9C38800E7C8F7 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9054A66D22A9C38800E7C8F7 /* WebKit.framework */; };
+		9062E35B22A994B700D7CEC2 /* ModeratorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9062E35A22A994B700D7CEC2 /* ModeratorView.xib */; };
+		9062E35E22A9955900D7CEC2 /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9062E35D22A9955900D7CEC2 /* DataView.swift */; };
+		9062E36022A9A43700D7CEC2 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9062E35F22A9A43700D7CEC2 /* WebViewController.swift */; };
+		9062E36222A9A6D500D7CEC2 /* InfiniteScroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9062E36122A9A6D500D7CEC2 /* InfiniteScroller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +30,14 @@
 		902EF37822A863360077CB47 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		902EF37B22A863360077CB47 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		902EF37D22A863360077CB47 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		902EF38422A865D90077CB47 /* Moderator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moderator.swift; sourceTree = "<group>"; };
+		902EF38722A86A8F0077CB47 /* ModeratorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeratorManager.swift; sourceTree = "<group>"; };
+		902EF38922A8721D0077CB47 /* TestFile */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestFile; sourceTree = "<group>"; };
+		9054A66D22A9C38800E7C8F7 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		9062E35A22A994B700D7CEC2 /* ModeratorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ModeratorView.xib; sourceTree = "<group>"; };
+		9062E35D22A9955900D7CEC2 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
+		9062E35F22A9A43700D7CEC2 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		9062E36122A9A6D500D7CEC2 /* InfiniteScroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteScroller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9054A66E22A9C38800E7C8F7 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +57,7 @@
 			children = (
 				902EF37022A863360077CB47 /* Infinite */,
 				902EF36F22A863360077CB47 /* Products */,
+				9054A66C22A9C38800E7C8F7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +72,53 @@
 		902EF37022A863360077CB47 /* Infinite */ = {
 			isa = PBXGroup;
 			children = (
+				902EF38622A86A7B0077CB47 /* Managers */,
+				902EF38322A865C70077CB47 /* Models */,
 				902EF37122A863360077CB47 /* AppDelegate.swift */,
-				902EF37322A863360077CB47 /* ViewController.swift */,
+				9062E35C22A9954800D7CEC2 /* Controllers */,
 				902EF37522A863360077CB47 /* Main.storyboard */,
+				9062E35A22A994B700D7CEC2 /* ModeratorView.xib */,
 				902EF37822A863360077CB47 /* Assets.xcassets */,
 				902EF37A22A863360077CB47 /* LaunchScreen.storyboard */,
 				902EF37D22A863360077CB47 /* Info.plist */,
+				902EF38922A8721D0077CB47 /* TestFile */,
 			);
 			path = Infinite;
+			sourceTree = "<group>";
+		};
+		902EF38322A865C70077CB47 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				902EF38422A865D90077CB47 /* Moderator.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		902EF38622A86A7B0077CB47 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				902EF38722A86A8F0077CB47 /* ModeratorManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		9054A66C22A9C38800E7C8F7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9054A66D22A9C38800E7C8F7 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9062E35C22A9954800D7CEC2 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				902EF37322A863360077CB47 /* ViewController.swift */,
+				9062E35D22A9955900D7CEC2 /* DataView.swift */,
+				9062E35F22A9A43700D7CEC2 /* WebViewController.swift */,
+				9062E36122A9A6D500D7CEC2 /* InfiniteScroller.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,8 +179,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				902EF38A22A8721D0077CB47 /* TestFile in Resources */,
 				902EF37C22A863360077CB47 /* LaunchScreen.storyboard in Resources */,
 				902EF37922A863360077CB47 /* Assets.xcassets in Resources */,
+				9062E35B22A994B700D7CEC2 /* ModeratorView.xib in Resources */,
 				902EF37722A863360077CB47 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,7 +195,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				902EF37422A863360077CB47 /* ViewController.swift in Sources */,
+				9062E36022A9A43700D7CEC2 /* WebViewController.swift in Sources */,
+				902EF38822A86A8F0077CB47 /* ModeratorManager.swift in Sources */,
+				9062E35E22A9955900D7CEC2 /* DataView.swift in Sources */,
+				9062E36222A9A6D500D7CEC2 /* InfiniteScroller.swift in Sources */,
 				902EF37222A863360077CB47 /* AppDelegate.swift in Sources */,
+				902EF38522A865D90077CB47 /* Moderator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
