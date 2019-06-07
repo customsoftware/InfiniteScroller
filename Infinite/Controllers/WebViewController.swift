@@ -15,10 +15,6 @@ class WebViewController: UIViewController {
     
     var webURL: URL?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.browseLink()

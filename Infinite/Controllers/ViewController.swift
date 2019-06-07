@@ -39,6 +39,7 @@ class ViewController: UIViewController {
     
     @objc func handleUpdateNotification() {
         DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             self.scroller.refreshArt()
         }
     }
@@ -48,8 +49,7 @@ extension ViewController: UIOutlet {
     func updateUI(with state: AppState) {
         DispatchQueue.main.async {
             switch state {
-            case .loadFinished:
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            case .loadFinished:()
             case .startingUp, .loadingImage:
                 UIApplication.shared.isNetworkActivityIndicatorVisible = true
             }

@@ -8,31 +8,6 @@
 
 import UIKit
 
-typealias LoadCompletionHandler = (Error?, [Moderator]?) -> Void
-
-enum LoadError: Error {
-    case badURL
-    case initialSerializeFailure
-    case deserializeFailure
-}
-
-enum AppState {
-    case startingUp
-    case loadFinished
-    case loadingImage
-}
-
-let photosDoneNotificationName = Notification.Name("didGetPhotos")
-
-protocol PhotoSearchHandler {
-    func handleFoundImage(_ image: UIImage, at recordIndex: Int)
-    func finished()
-}
-
-protocol UIOutlet {
-    func updateUI(with state: AppState)
-}
-
 class ModeratorManager {
     static let shared = ModeratorManager()
     
@@ -45,7 +20,7 @@ class ModeratorManager {
         queue.maxConcurrentOperationCount = 5
         
         uiDelegate?.updateUI(with: .startingUp)
-        ModeratorManager.loadFromFile { (error, results) in
+        loadFromFile { (error, results) in
             if let error = error {
                 print("There was an error loading moderators: \(error.localizedDescription)")
             } else if let moderators = results {
@@ -69,8 +44,10 @@ class ModeratorManager {
         guard let foundModerator = moderatorList.first(where: { $0.userID == id }) else { return nil }
         return foundModerator
     }
-    
-    private static func loadFromFile(with handler: LoadCompletionHandler) {
+}
+
+fileprivate extension ModeratorManager {
+    func loadFromFile(with handler: LoadCompletionHandler) {
         guard let testFileURL = Bundle.main.url(forResource: "TestFile", withExtension: nil) else {
             handler( LoadError.badURL, [])
             return }
@@ -90,12 +67,12 @@ class ModeratorManager {
             let moderators = try decoder.decode([Moderator].self, from: moderatorData)
             
             moderators.forEach({
-                let newPhotoOP = PhotoLookupOperation($0.profileImageLink, with: $0.userID, and: ModeratorManager.shared)
-                ModeratorManager.shared.queue.addOperation(newPhotoOP)
+                let newPhotoOP = PhotoLookupOperation($0.profileImageLink, with: $0.userID, and: self)
+                queue.addOperation(newPhotoOP)
             })
             
-            let finishOp = PhotoLookupOperationFinished(with: ModeratorManager.shared)
-            ModeratorManager.shared.queue.addOperation(finishOp)
+            let finishOp = PhotoLookupOperationFinished(with: self)
+            queue.addOperation(finishOp)
             
             handler(nil, moderators)
         } catch {
@@ -114,37 +91,5 @@ extension ModeratorManager: PhotoSearchHandler {
     
     func finished() {
         NotificationCenter.default.post(name: photosDoneNotificationName, object: nil)
-    }
-}
-
-class PhotoLookupOperationFinished: Operation {
-    let delegate: PhotoSearchHandler?
-    
-    init(with aDelegate: PhotoSearchHandler?) {
-        delegate = aDelegate
-    }
-    
-    override func main() {
-        delegate?.finished()
-    }
-}
-
-class PhotoLookupOperation: Operation {
-    let userID: Int
-    let photoURL: String
-    let photoDelegate: PhotoSearchHandler?
-    
-    init(_ photoURLString: String, with moderatorUserID: Int, and delegate: PhotoSearchHandler?) {
-        userID = moderatorUserID
-        photoURL = photoURLString
-        photoDelegate = delegate
-    }
-    
-    override func main() {
-        guard let url = URL(string: photoURL),
-            let imageData = try? Data(contentsOf: url),
-            let newImage = UIImage(data: imageData) else { return }
-        
-        photoDelegate?.handleFoundImage(newImage, at: userID)
     }
 }

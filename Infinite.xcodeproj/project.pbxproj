@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9009B2AC22AAA587006028FA /* Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9009B2AB22AAA587006028FA /* Operations.swift */; };
+		9009B2AE22AAA5BF006028FA /* MiscComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9009B2AD22AAA5BF006028FA /* MiscComponents.swift */; };
 		902EF37222A863360077CB47 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902EF37122A863360077CB47 /* AppDelegate.swift */; };
 		902EF37422A863360077CB47 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 902EF37322A863360077CB47 /* ViewController.swift */; };
 		902EF37722A863360077CB47 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 902EF37522A863360077CB47 /* Main.storyboard */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9009B2AB22AAA587006028FA /* Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operations.swift; sourceTree = "<group>"; };
+		9009B2AD22AAA5BF006028FA /* MiscComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscComponents.swift; sourceTree = "<group>"; };
 		902EF36E22A863360077CB47 /* Infinite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Infinite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		902EF37122A863360077CB47 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		902EF37322A863360077CB47 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -98,6 +102,8 @@
 			isa = PBXGroup;
 			children = (
 				902EF38722A86A8F0077CB47 /* ModeratorManager.swift */,
+				9009B2AD22AAA5BF006028FA /* MiscComponents.swift */,
+				9009B2AB22AAA587006028FA /* Operations.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -200,7 +206,9 @@
 				9062E35E22A9955900D7CEC2 /* DataView.swift in Sources */,
 				9062E36222A9A6D500D7CEC2 /* InfiniteScroller.swift in Sources */,
 				902EF37222A863360077CB47 /* AppDelegate.swift in Sources */,
+				9009B2AE22AAA5BF006028FA /* MiscComponents.swift in Sources */,
 				902EF38522A865D90077CB47 /* Moderator.swift in Sources */,
+				9009B2AC22AAA587006028FA /* Operations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

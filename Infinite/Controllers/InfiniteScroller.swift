@@ -8,12 +8,6 @@
 
 import UIKit
 
-enum NewFrameRelativeLocation {
-    case above
-    case below
-    case same
-}
-
 class InfiniteScroller: UIScrollView {
     let cellHeight: CGFloat = 150
     
@@ -23,14 +17,6 @@ class InfiniteScroller: UIScrollView {
     var displayedModeratorViews = [DataView]()
     weak var passThroughDelegate: ShowLink?
     
-    func configureView(in containerView: UIView) {
-        showsVerticalScrollIndicator = false
-        showsHorizontalScrollIndicator = false
-        contentSize = CGSize(width: containerView.frame.width, height: containerView.frame.height * 5)
-        contentView = subviews.first
-        initialLoad()
-    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         recenterIfNecessary()
@@ -39,6 +25,14 @@ class InfiniteScroller: UIScrollView {
         let minimumVisibleY = visibleBounds.minY
         let maximumVisibleY = visibleBounds.maxY
         tileImagesFrom(from: minimumVisibleY, to: maximumVisibleY)
+    }
+    
+    func configureView(in containerView: UIView) {
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
+        contentSize = CGSize(width: containerView.frame.width, height: containerView.frame.height * 5)
+        contentView = subviews.first
+        initialLoad()
     }
     
     func refreshArt() {
@@ -70,34 +64,44 @@ fileprivate extension InfiniteScroller {
     }
     
     func tileImagesFrom(from minVisibleY: CGFloat, to maxVisibleY: CGFloat) {
-        if displayedModeratorViews.count == 0 {
-            let newModeratorView = createNewModeratorView(for: currentFirstPointer)
-            let newFrame = setGetNextFrame(currentY: minVisibleY, in: .same)
-            newModeratorView.frame = newFrame
-            displayedModeratorViews.append(newModeratorView)
-            currentLastPointer += 1
-            currentFirstPointer -= 1
-        }
-        
-        // Add moderators below visible line
+        addFirstTile(at: minVisibleY)
+        addTrailingModerators(from: maxVisibleY)
+        addPrecedingModerators(from: minVisibleY)
+        removeTrailingModerators(from: maxVisibleY)
+        removePrecedingModerators(from: minVisibleY)
+    }
+    
+    func addFirstTile(at scrollPosition: CGFloat) {
+        guard displayedModeratorViews.count == 0 else { return }
+        let newModeratorView = createNewModeratorView(for: currentFirstPointer)
+        let newFrame = getNextFrame(currentY: scrollPosition, in: .same)
+        newModeratorView.frame = newFrame
+        displayedModeratorViews.append(newModeratorView)
+        currentLastPointer += 1
+        currentFirstPointer -= 1
+    }
+    
+    func addTrailingModerators(from scrollPosition: CGFloat) {
         if let lastModerator = displayedModeratorViews.last {
             var bottomEdge = lastModerator.frame.minY
-            while bottomEdge < maxVisibleY {
+            while bottomEdge < scrollPosition {
                 bottomEdge = addNewModeratorsBelow(bottom: bottomEdge, for: currentLastPointer)
             }
         }
-
-        // Add moderators above visible line
+    }
+    
+    func addPrecedingModerators(from scrollPosition: CGFloat) {
         if let firstModerator = displayedModeratorViews.first {
             var topEdge = firstModerator.frame.minY
-            while topEdge > minVisibleY {
+            while topEdge > scrollPosition {
                 topEdge = addNewModeratorsAbove(top: topEdge, for: currentFirstPointer)
             }
         }
-
-        // Remove moderators below visible line
+    }
+    
+    func removeTrailingModerators(from scrollPosition: CGFloat) {
         if var lastModerator = displayedModeratorViews.last {
-            while lastModerator.frame.minY > maxVisibleY {
+            while lastModerator.frame.minY > scrollPosition {
                 lastModerator.removeFromSuperview()
                 displayedModeratorViews.removeLast()
                 if let last = displayedModeratorViews.last {
@@ -107,10 +111,11 @@ fileprivate extension InfiniteScroller {
                 bumpDown(counter: &currentLastPointer)
             }
         }
-
-        // Remove moderators above visible line
+    }
+    
+    func removePrecedingModerators(from scrollPosition: CGFloat) {
         if var firstModerator = displayedModeratorViews.first {
-            while firstModerator.frame.maxY < minVisibleY {
+            while firstModerator.frame.maxY < scrollPosition {
                 firstModerator.removeFromSuperview()
                 displayedModeratorViews.removeFirst()
                 firstModerator = displayedModeratorViews[0]
@@ -134,7 +139,7 @@ fileprivate extension InfiniteScroller {
         counter += 1
     }
     
-    func setGetNextFrame(currentY: CGFloat, in position: NewFrameRelativeLocation) -> CGRect {
+    func getNextFrame(currentY: CGFloat, in position: NewFrameRelativeLocation) -> CGRect {
         let offSet: CGFloat
         switch position {
         case .same:
@@ -168,7 +173,7 @@ fileprivate extension InfiniteScroller {
         let newModeratorView = createNewModeratorView(for: currentFirstPointer)
         displayedModeratorViews.insert(newModeratorView, at: 0)
         bumpDown(counter: &currentFirstPointer)
-        newModeratorView.frame = setGetNextFrame(currentY: top, in: .above)
+        newModeratorView.frame = getNextFrame(currentY: top, in: .above)
         return newModeratorView.frame.minY
     }
     
@@ -176,7 +181,7 @@ fileprivate extension InfiniteScroller {
         let newModeratorView = createNewModeratorView(for: currentLastPointer)
         displayedModeratorViews.append(newModeratorView)
         bumpUp(counter: &currentLastPointer)
-        newModeratorView.frame = setGetNextFrame(currentY: bottom, in: .below)
+        newModeratorView.frame = getNextFrame(currentY: bottom, in: .below)
         return newModeratorView.frame.minY
     }
     
